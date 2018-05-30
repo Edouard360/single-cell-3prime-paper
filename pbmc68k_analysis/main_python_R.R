@@ -23,9 +23,9 @@ library(sparsity)
 # specify paths and load functions
 # -------------------------------------
 FILE_DIR <- "./"
-DATA_DIR <- file.path(FILE_DIR, "../PBMC")
-PROG_DIR <- file.path(FILE_DIR, "../PBMC/single-cell-3prime-paper/pbmc68k_analysis")
-RES_DIR  <- file.path(FILE_DIR,"data/68k")
+DATA_DIR <- "data/68k"
+PROG_DIR <- "single-cell-3prime-paper/pbmc68k_analysis/"
+RES_DIR  <- "data/68k"
 
 source(file.path(PROG_DIR,"util.R"))
 source(file.path(PROG_DIR,"select_pure_pbmc.R"))
