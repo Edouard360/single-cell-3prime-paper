@@ -158,8 +158,9 @@ plot_heatmap_and_write_genes <- function(n_clust,tsne_df,mat,genes,dir) {
   x_filt<-x[,x_use_genes]
   rs<-rowSums(x_filt)
   rs_med<-median(rs)
-  x_norm<-x_filt/(rs/rs_med)
-  list(m=x_norm,use_genes=x_use_genes)
+  dge_x_filt<-as(x_filt,"dgeMatrix")
+  x_norm<-rs_med*dge_x_filt/rs
+  list(m=as(x_norm,"dgCMatrix"),use_genes=x_use_genes)
 }
 # --------------------------------------
 # down-sample a gene-barcode matrix
@@ -200,7 +201,8 @@ plot_heatmap_and_write_genes <- function(n_clust,tsne_df,mat,genes,dir) {
     cat("Subsampling\n")
     bc_gene_umi_subsampled <- bc_gene_umi %>% mutate(reads=rbinom(length(reads), reads, subsample_rate))
     cat("Sorting\n")
-    setkey(bc_gene_umi_subsampled, barcode, gene)
+    bc_gene_umi_subsampled<-data.table(bc_gene_umi_subsampled)
+    setkey(bc_gene_umi_subsampled, barcode, gene) # x is not a data.table ?
     cat("Re-aggregating\n")
     bc_gene_counts <- bc_gene_umi_subsampled[barcode %in% orig_mat_barcodes, j=list(count=sum(reads > 0)), by=c('barcode', 'gene')]
     cat("Building matrix\n")
