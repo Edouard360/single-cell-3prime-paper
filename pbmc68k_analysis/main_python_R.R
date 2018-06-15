@@ -23,9 +23,9 @@ library(sparsity)
 # specify paths and load functions
 # -------------------------------------
 FILE_DIR <- "./"
-DATA_DIR <- "data/68k"
+DATA_DIR <- "data/mp"
 PROG_DIR <- "single-cell-3prime-paper/pbmc68k_analysis/"
-RES_DIR <- "data/68k"
+RES_DIR <- "data/mp"
 
 source(file.path(PROG_DIR, "util.R"))
 source(file.path(PROG_DIR, "select_pure_pbmc.R"))
@@ -43,6 +43,13 @@ all_mol_info <- pure_pbmcs$all_mol_info
 symbols_pure <- all_data_pure_pbmcs[[1]]$hg19$gene_symbols
 genes_pure <- all_data_pure_pbmcs[[1]]$hg19$genes
 
+all(startsWith(genes_pure, "ENSG00000"))
+sprintf("We can factorize the gene names")
+all(genes_pure==paste("ENSG00000",substr(genes_pure, 10,15), sep=""))
+
+# Writting the genes names and symbols
+write.csv(substr(genes_pure, 10,15), file = file.path(RES_DIR, "gene_names.csv"))
+write.csv(symbols_pure, file = file.path(RES_DIR, "gene_symbols.csv"))
 # -------------------------------------------------------------------------
 # downsample mapped reads/cell
 # so that all samples have the same # of confidently mapped reads/cell
